@@ -1,0 +1,7 @@
+firebase_admin
+firebase-admin
+flask
+requests
+python-dotenv
+dotenv
+firebase-admin

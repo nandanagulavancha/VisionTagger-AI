@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisionTagger AI - Search History</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap">
+    <style>
+        * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { text-align: center; background: #f4f4f4; padding: 15px; }
+        h1 { color: #333; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        .search-box { margin-bottom: 20px; }
+        input[type="text"] { width: 70%; padding: 10px; border-radius: 5px; border: 1px solid #ccc; }
+        button { padding: 10px 15px; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #2980b9; }
+        .history-item { background: #e3f2fd; padding: 10px; border-radius: 5px; margin: 10px 0; display: flex; justify-content: space-between; align-items: center; }
+        .delete-button, .download-button { background: #e74c3c; color: white; padding: 5px 10px; border: none; border-radius: 5px; cursor: pointer; }
+        .delete-button:hover { background: #c0392b; }
+        .download-button { background: #27ae60; }
+        .download-button:hover { background: #219150; }
+    </style>
+</head>
+<body>
+    <!-- <a href="{{ url_for('home') }}" style="display: inline-block; padding:10px 20px; background:#3498db; color:white; text-decoration:none; border-radius:5px;">Home</a> -->
+
+    <div class="container">
+        <h1>Search Analyzed Images</h1>
+
+        <!-- Search Form -->
+         
+        <form method="POST" class="search-box">
+            <input type="text" name="search_tag" placeholder="Enter a tag..." value="{{ search_query or '' }}">
+            <button type="submit">Search</button> 
+            <button><a href="{{ url_for('home') }}" style="display: inline-block; color:white; text-decoration:none;">Home</a></button>
+            
+        </form>
+
+        <!-- Display Search Results -->
+        {% if past_metadata %}
+            {% for item in past_metadata %}
+                <div class="history-item">
+                    <div>
+                        <strong>{{ item.image_name }}</strong><br>
+                        Tags: {{ item.tags | join(", ") }}
+                    </div>
+                    <div>
+                        <a href="{{ url_for('download_metadata', image_name=item.image_name) }}" class="download-button">Download</a>
+                        <form method="POST" action="{{ url_for('delete_image', image_name=item.image_name) }}" style="display:inline;">
+                            <button type="submit" class="delete-button">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No images found for "{{ search_query }}"</p>
+        {% endif %}
+
+        <br>
+        <a href="{{ url_for('home') }}">← Back to Home</a>
+    </div>
+</body>
+</html>
