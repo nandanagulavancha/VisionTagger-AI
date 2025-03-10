@@ -15,7 +15,11 @@ fi
 # Activate virtual environment (if not already activated)
 if [ -z "$VIRTUAL_ENV" ]; then
     echo "Virtual environment not active. Activating..."
-    source venv/Scripts/activate
+    source "./venv/bin/activate"
+fi
+
+if [ ! -z "$VIRTUAL_ENV" ]; then
+    echo "Virtual environment actived"
 fi
 
 # install all requirements

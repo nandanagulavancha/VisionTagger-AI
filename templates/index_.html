@@ -1,0 +1,113 @@
+<html>
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.5.6/jsoneditor.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.5.6/jsoneditor.min.css">
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #f0f4f8;
+        }
+        .btn {
+            background-color: #4a90e2;
+            color: white;
+        }
+        .btn-secondary {
+            background-color: #50e3c2;
+            color: white;
+        }
+        .header {
+            background-color: #ffffff;
+        }
+        .divider {
+            border-bottom: 2px solid #dee3ea;
+        }
+        .content-area {
+            background-color: #ffffff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .text-area {
+            background-color: #f3f4f6;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .CodeMirror {
+            height: auto;   /* Let it grow dynamically */
+            max-height: 80vh; /* Prevent it from being too large */
+        }
+    </style>
+</head>
+<body>
+<div class="w-full p-4 header">
+    <h1 class="text-4xl font-bold mb-4 text-gray-800">Vision Tagger</h1>
+</div>
+<div class="divider"></div>
+<div class="container mx-auto p-4">
+    <div class="flex flex-wrap">
+        <div class="w-full md:w-1/2 p-2">
+            <form method="POST" enctype="multipart/form-data">
+                <div class="mb-4">
+                    <input type="file" name="image" required class="btn px-4 py-2 rounded shadow-md">
+                </div>
+                <div class="mb-4">
+                    <a href="{{ url_for('history') }}" class="btn-secondary px-4 py-2 rounded shadow-md">
+                        <i class="fas fa-history"></i> History
+                    </a>
+                    <button type="submit" class="btn-secondary px-4 py-2 rounded shadow-md ml-2">
+                        <i class="fas fa-chart-line"></i> Upload & Analyze
+                    </button>
+                </div>
+            </form>
+            <div class="content-area border border-dotted border-gray-400 p-4 h-64">
+                <div class="flex items-center justify-center h-full">
+                    {% if image_name %}
+                    <img src="{{ url_for('uploaded_file', filename=image_name) }}" alt="Uploaded Image" class="w-full h-full object-cover">
+
+                    {% else %}
+                        <span>Upload an image to analyze</span>
+                    {% endif %}
+                </div>
+            </div>
+            
+            {% if image_name %}
+                <textarea name="tags" class="text-area border border-dotted border-gray-400 p-4 h-48 w-full mt-4" placeholder="No tags"></textarea>    
+            {% endif %}
+        </div>
+        <div class="w-full md:w-1/2 p-2">
+            <div class="mb-4 flex items-center">
+                {% if image_name %}
+                <form method="POST" action="{{ url_for('edit_metadata', image_name=image_name) }}">
+                    <button type="submit" class="btn px-4 py-2 rounded shadow-md">
+                        <i class="fas fa-save"></i> Save
+                    </button>
+                </form>
+                <a href="{{ url_for('download_metadata', image_name=image_name) }}" class="btn px-4 py-2 rounded shadow-md ml-2">
+                    <i class="fas fa-download"></i> Download
+                </a>
+                <label class="ml-4 text-gray-800" for="filename">File Name</label>
+                <input type="text" id="filename" name="filename" placeholder="{{ image_name }}" class="px-4 py-2 rounded shadow-md ml-2 w-1/3" value="{{ image_name }}" required>
+                <label class="ml-2 text-gray-800" for="filename">.json</label>
+                {% endif %}
+            </div>
+            <div class="text-area border border-dotted border-gray-400 p-4 w-full" name="edited_json" id="code-editor"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var editor = CodeMirror(document.getElementById("code-editor"), {
+            lineNumbers: true,
+            mode: "javascript",
+            theme: "default"
+        });
+        {% if metadata %}
+            editor.setValue(JSON.stringify({{ metadata | tojson(indent=2) }}, null, 2));
+        {% endif %}
+    });
+</script>
+</body>
+</html>
