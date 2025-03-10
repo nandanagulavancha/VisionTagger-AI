@@ -10,7 +10,7 @@ VisionTagger AI is an AI-powered image tagging and metadata generation tool that
 
 ## 🔹 Tech Stack  
 - **Frontend:** HTML, CSS, JavaScript  
-- **Backend:** Python (Flask/Django)  
+- **Backend:** Python (Flask)  
 - **API Used:** **Google Gemini Vision Pro** (Paid API – using trial version)  
 
 ## 🔹 Setup Instructions  
