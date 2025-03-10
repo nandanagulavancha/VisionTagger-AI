@@ -17,10 +17,10 @@ VisionTagger AI is an AI-powered image tagging and metadata generation tool that
 ### 🛠 Prerequisites  
 - Install **Python 3.x**  
 - Install dependencies: 
-        pip install -r requirements.txt
+        - pip install -r requirements.txt
 🚀 Running the Application
-        python app.py
-    Then open http://localhost:5000 in your browser.
+        - python app.py
+    - Then open http://localhost:5000 in your browser.
     
 🔹 API Access
 ⚠ Note: We are using a paid API on a trial basis.
